@@ -1,0 +1,61 @@
+/* general page style */
+body {
+  background: #111;
+  color: #fff;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+/* game container */
+#game {
+  position: relative;
+  width: 400px;
+  height: 600px;
+  margin: 20px auto;
+  border: 3px solid #fff;
+  background: #222;
+  overflow: hidden;
+}
+
+/* shot meter */
+#shotMeter {
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  width: 300px;
+  height: 20px;
+  background: #555;
+}
+
+/* perfect shot zone */
+#greenZone {
+  position: absolute;
+  height: 100%;
+  width: 50px;
+  background: #0f0;
+  left: 125px;
+}
+
+/* basketball ball */
+.ball {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: orange;
+  bottom: 50px;
+  left: 190px;
+}
+
+/* feedback text */
+#feedback {
+  font-size: 32px;
+  margin-top: 20px;
+  height: 40px;
+}
+
+/* score text */
+#score {
+  font-size: 24px;
+  margin-top: 10px;
+}
