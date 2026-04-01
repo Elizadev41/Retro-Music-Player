@@ -3,23 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>Basketball Rhythm Game</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
+<div class ="container">
 <h1>Basketball Rhythm Game</h1>
 
+<div class="stats">
+    <div class="stat-item">
+      <span class="stat-label">Score</span>
+      <span id="score" class="stat-value">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Combo</span>
+      <span id="combo" class="stat-value">0x</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Accuracy</span>
+      <span id="accuracy" class="stat-value">0%</span>
+    </div>
+  </div>
+
 <div id="game">
-  <div id="shotMeter">
-    <div id="greenZone"></div>
+    <!-- Hoop -->
+    <div class="hoop-container">
+      <div class="backboard"></div>
+      <div class="rim"></div>
+      <div class="net">
+        <div class="net-strand"></div>
+        <div class="net-strand"></div>
+        <div class="net-strand"></div>
+        <div class="net-strand"></div>
+        <div class="net-strand"></div>
+      </div>
+    </div>
+ 
+    <!-- Shot meter -->
+    <div id="shotMeter">
+      <div class="zone perfect-zone"></div>
+      <div class="zone good-zone-left"></div>
+      <div class="zone good-zone-right"></div>
+      <div id="indicator"></div>
+    </div>
+ 
+    <!-- Beat indicators will spawn here -->
+  </div>
+ 
+  <div id="feedback"></div>
+ 
+  <div class="controls">
+    <button id="startBtn" onclick="startGame()">▶ Start Game</button>
+    <button id="pauseBtn" onclick="togglePause()" disabled>⏸ Pause</button>
+    <button onclick="resetGame()">🔄 Reset</button>
+  </div>
+ 
+  <div class="instructions">
+    <p><strong>How to Play:</strong></p>
+    <p>Press <kbd>SPACE</kbd> when the beat indicator hits the shot meter!</p>
+    <p>🎯 <span class="perfect-text">Perfect</span> = Green zone | 
+       👍 <span class="good-text">Good</span> = Yellow zones | 
+       💀 <span class="miss-text">Miss</span> = Red zones</p>
   </div>
 </div>
-
-<p id="feedback"></p>
-<p id="score">Score: 0</p>
+ 
 
 <audio id="song" src="dna_kendrick_lamar.mp3"></audio>
-<button onclick="startGame()">Start</button>
 
 <script src="game.js"></script>
 </body>
