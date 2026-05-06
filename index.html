@@ -1,74 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Basketball Rhythm Game</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetroWave Player</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class ="container">
-<h1>Basketball Rhythm Game</h1>
-
-<div class="stats">
-    <div class="stat-item">
-      <span class="stat-label">Score</span>
-      <span id="score" class="stat-value">0</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-label">Combo</span>
-      <span id="combo" class="stat-value">0x</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-label">Accuracy</span>
-      <span id="accuracy" class="stat-value">0%</span>
-    </div>
-  </div>
-
-<div id="game">
-    <!-- Hoop -->
-    <div class="hoop-container">
-      <div class="backboard"></div>
-      <div class="rim"></div>
-      <div class="net">
-        <div class="net-strand"></div>
-        <div class="net-strand"></div>
-        <div class="net-strand"></div>
-        <div class="net-strand"></div>
-        <div class="net-strand"></div>
+  <main class="player-shell">
+    <section class="deck" aria-label="Retro audio player">
+      <div class="deck-top">
+        <div>
+          <p class="eyebrow">Pocket Stereo</p>
+          <h1>RetroWave Player</h1>
+        </div>
+        <div class="badge" id="playerState">Stopped</div>
       </div>
-    </div>
- 
-    <!-- Shot meter -->
-    <div id="shotMeter">
-      <div class="zone perfect-zone"></div>
-      <div class="zone good-zone-left"></div>
-      <div class="zone good-zone-right"></div>
-      <div id="indicator"></div>
-    </div>
- 
-    <!-- Beat indicators will spawn here -->
-  </div>
- 
-  <div id="feedback"></div>
- 
-  <div class="controls">
-    <button id="startBtn" onclick="startGame()">▶ Start Game</button>
-    <button id="pauseBtn" onclick="togglePause()" disabled>⏸ Pause</button>
-    <button onclick="resetGame()">🔄 Reset</button>
-  </div>
- 
-  <div class="instructions">
-    <p><strong>How to Play:</strong></p>
-    <p>Press <kbd>SPACE</kbd> when the beat indicator hits the shot meter!</p>
-    <p>🎯 <span class="perfect-text">Perfect</span> = Green zone | 
-       👍 <span class="good-text">Good</span> = Yellow zones | 
-       💀 <span class="miss-text">Miss</span> = Red zones</p>
-  </div>
-</div>
- 
 
-<audio id="song" src="dna_kendrick_lamar.mp3"></audio>
+      <div class="display">
+        <div class="scanline" aria-hidden="true"></div>
+        <div class="track-meta">
+          <p class="label">Now Playing</p>
+          <h2 id="trackTitle">DNA - Kendrick Lamar</h2>
+          <p id="trackSource">Built-in tape</p>
+        </div>
+        <canvas id="visualizer" width="640" height="180" aria-hidden="true"></canvas>
+      </div>
 
-<script src="game.js"></script>
+      <audio id="audio" src="dna_kendrick_lamar.mp3" preload="metadata"></audio>
+
+      <div class="time-row">
+        <span id="currentTime">0:00</span>
+        <input id="seekSlider" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek track">
+        <span id="duration">0:00</span>
+      </div>
+
+      <div class="controls" aria-label="Playback controls">
+        <button id="prevBtn" class="icon-btn" type="button" aria-label="Previous track">|&lt;</button>
+        <button id="rewindBtn" class="icon-btn" type="button" aria-label="Rewind 10 seconds">&lt;&lt;</button>
+        <button id="playBtn" class="play-btn" type="button" aria-label="Play">Play</button>
+        <button id="forwardBtn" class="icon-btn" type="button" aria-label="Forward 10 seconds">&gt;&gt;</button>
+        <button id="nextBtn" class="icon-btn" type="button" aria-label="Next track">&gt;|</button>
+      </div>
+
+      <div class="mix-panel">
+        <label>
+          <span>Volume</span>
+          <input id="volumeSlider" type="range" min="0" max="1" value="0.8" step="0.01">
+        </label>
+        <label>
+          <span>Speed</span>
+          <select id="speedSelect">
+            <option value="0.75">0.75x</option>
+            <option value="1" selected>1x</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+          </select>
+        </label>
+        <button id="shuffleBtn" class="toggle-btn" type="button" aria-pressed="false">Shuffle</button>
+        <button id="repeatBtn" class="toggle-btn" type="button" aria-pressed="false">Repeat</button>
+      </div>
+    </section>
+
+    <aside class="library" aria-label="Music library">
+      <div class="library-head">
+        <div>
+          <p class="eyebrow">Mixtape</p>
+          <h2>Library</h2>
+        </div>
+        <label class="file-btn">
+          Add MP3s
+          <input id="fileInput" type="file" accept="audio/*" multiple>
+        </label>
+      </div>
+
+      <div id="playlist" class="playlist"></div>
+    </aside>
+  </main>
+
+  <script src="game.js"></script>
 </body>
 </html>
