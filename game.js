@@ -13,6 +13,7 @@ const fileInput = document.getElementById("fileInput");
 const playlistEl = document.getElementById("playlist");
 const trackTitleEl = document.getElementById("trackTitle");
 const trackSourceEl = document.getElementById("trackSource");
+const coverArtEl = document.getElementById("coverArt");
 const currentTimeEl = document.getElementById("currentTime");
 const durationEl = document.getElementById("duration");
 const playerStateEl = document.getElementById("playerState");
@@ -22,8 +23,38 @@ const canvasContext = visualizer.getContext("2d");
 const tracks = [
   {
     title: "DNA - Kendrick Lamar",
+    artist: "Kendrick Lamar",
     source: "Built-in tape",
     url: "dna_kendrick_lamar.mp3",
+    cover: "",
+    licenseUrl: "",
+    duration: ""
+  },
+  {
+    title: "Slow Down",
+    artist: "Bobby V",
+    source: "Built-in tape",
+    url: "bobby-v-slow-down-12-version-128-ytshorts.savetube.me.mp3",
+    cover: "",
+    licenseUrl: "",
+    duration: ""
+  },
+  {
+    title: "Candy Rain",
+    artist: "Soul for Real",
+    source: "Built-in tape",
+    url: "Candy Rain - Soul for Real .mp3",
+    cover: "",
+    licenseUrl: "",
+    duration: ""
+  },
+  {
+    title: "Freaky in the Club",
+    artist: "R. Kelly",
+    source: "Built-in tape",
+    url: "r-kelly-freaky-in-the-club-128-ytshorts.savetube.me.mp3",
+    cover: "",
+    licenseUrl: "",
     duration: ""
   }
 ];
@@ -61,18 +92,30 @@ function renderPlaylist() {
     button.addEventListener("click", () => loadTrack(index, true));
 
     const trackIndex = document.createElement("span");
+    const trackCover = document.createElement("img");
     const trackName = document.createElement("span");
+    const trackTitle = document.createElement("span");
+    const trackArtist = document.createElement("span");
     const trackTime = document.createElement("span");
 
     trackIndex.className = "track-index";
+    trackCover.className = "track-cover";
     trackName.className = "track-name";
+    trackTitle.className = "track-title";
+    trackArtist.className = "track-artist";
     trackTime.className = "track-time";
 
     trackIndex.textContent = String(index + 1).padStart(2, "0");
-    trackName.textContent = track.title;
+    trackCover.alt = "";
+    if (track.cover) {
+      trackCover.src = track.cover;
+    }
+    trackTitle.textContent = track.title;
+    trackArtist.textContent = track.artist || track.source;
     trackTime.textContent = track.duration || "--:--";
 
-    button.append(trackIndex, trackName, trackTime);
+    trackName.append(trackTitle, trackArtist);
+    button.append(trackIndex, trackCover, trackName, trackTime);
 
     playlistEl.appendChild(button);
   });
@@ -81,18 +124,35 @@ function renderPlaylist() {
 function updateTrackDetails() {
   const track = tracks[activeTrackIndex];
   trackTitleEl.textContent = track.title;
-  trackSourceEl.textContent = track.source;
+  trackSourceEl.textContent = track.artist ? `${track.artist} - ${track.source}` : track.source;
+  if (track.cover) {
+    coverArtEl.src = track.cover;
+  } else {
+    coverArtEl.removeAttribute("src");
+  }
   playerStateEl.textContent = audio.paused ? "Stopped" : "Playing";
   renderPlaylist();
 }
 
+function setTrackAudioSource(track) {
+  audio.removeAttribute("crossorigin");
+  audio.src = track.url;
+}
+
 function loadTrack(index, shouldPlay = false) {
+  const wasPlaying = !audio.paused;
+
+  if (visualizerFrame) {
+    cancelAnimationFrame(visualizerFrame);
+    visualizerFrame = null;
+  }
+
   activeTrackIndex = index;
-  audio.src = tracks[activeTrackIndex].url;
+  setTrackAudioSource(tracks[activeTrackIndex]);
   audio.load();
   updateTrackDetails();
 
-  if (shouldPlay) {
+  if (shouldPlay || wasPlaying) {
     playAudio();
   }
 }
@@ -271,8 +331,11 @@ fileInput.addEventListener("change", () => {
   files.forEach((file) => {
     tracks.push({
       title: cleanFileName(file.name),
+      artist: "Local file",
       source: "Local tape",
       url: URL.createObjectURL(file),
+      cover: "",
+      licenseUrl: "",
       duration: ""
     });
   });
@@ -307,6 +370,24 @@ audio.addEventListener("pause", () => {
   }
 });
 
+audio.addEventListener("waiting", () => {
+  playerStateEl.textContent = "Buffering";
+});
+
+audio.addEventListener("stalled", () => {
+  playerStateEl.textContent = "Loading";
+});
+
+audio.addEventListener("canplay", () => {
+  if (!audio.paused) {
+    playerStateEl.textContent = "Playing";
+  }
+});
+
+audio.addEventListener("error", () => {
+  playerStateEl.textContent = "Audio error";
+});
+
 audio.addEventListener("ended", () => {
   if (isRepeatOn) {
     audio.currentTime = 0;
@@ -326,7 +407,7 @@ audio.addEventListener("ended", () => {
 document.addEventListener("keydown", (event) => {
   const tagName = document.activeElement.tagName.toLowerCase();
 
-  if (tagName === "input" || tagName === "select") {
+  if (tagName === "input" || tagName === "select" || tagName === "button") {
     return;
   }
 
@@ -346,5 +427,7 @@ document.addEventListener("keydown", (event) => {
 
 audio.volume = Number(volumeSlider.value);
 audio.playbackRate = Number(speedSelect.value);
+setTrackAudioSource(tracks[activeTrackIndex]);
 renderPlaylist();
+updateTrackDetails();
 drawIdleVisualizer();

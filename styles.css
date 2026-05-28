@@ -1,7 +1,7 @@
 :root {
   --ink: #16110f;
   --panel: #2c2626;
-  --panel-dark: #171313;
+  --panel-dark: #242020;
   --cream: #fff4d6;
   --mint: #73fbd3;
   --hot: #ff4f9a;
@@ -138,6 +138,7 @@ h2 {
 .track-meta {
   position: relative;
   z-index: 1;
+  max-width: calc(100% - 150px);
 }
 
 #trackTitle {
@@ -157,6 +158,27 @@ h2 {
   height: 150px;
   margin-top: 22px;
   image-rendering: pixelated;
+}
+
+.cover-art {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  width: 118px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 3px solid var(--ink);
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--hot), var(--mint));
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.38);
+}
+
+.cover-art:not([src]) {
+  display: none;
+}
+
+.track-cover:not([src]) {
+  display: none;
 }
 
 .time-row {
@@ -196,6 +218,12 @@ button {
 button:active {
   transform: translateY(3px);
   box-shadow: 0 2px 0 #000;
+}
+
+button:disabled {
+  cursor: wait;
+  filter: grayscale(0.6);
+  opacity: 0.72;
 }
 
 .icon-btn {
@@ -262,12 +290,21 @@ select {
 .track {
   width: 100%;
   display: grid;
-  grid-template-columns: 34px 1fr auto;
+  grid-template-columns: 34px 44px minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
   padding: 12px;
   text-align: left;
   background: #fff4d6;
+}
+
+.track-cover {
+  width: 44px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  background: var(--amber);
 }
 
 .track.active {
@@ -281,9 +318,20 @@ select {
 
 .track-name {
   min-width: 0;
+}
+
+.track-title,
+.track-artist {
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.track-artist {
+  margin-top: 2px;
+  color: rgba(22, 17, 15, 0.64);
+  font-size: 0.82rem;
 }
 
 .track-time {
@@ -324,6 +372,16 @@ select {
   .display {
     min-height: 260px;
     padding: 16px;
+  }
+
+  .track-meta {
+    max-width: 100%;
+  }
+
+  .cover-art {
+    position: static;
+    width: 96px;
+    margin-top: 16px;
   }
 
   .icon-btn {
