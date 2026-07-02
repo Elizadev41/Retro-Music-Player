@@ -25,7 +25,7 @@ const tracks = [
     title: "DNA - Kendrick Lamar",
     artist: "Kendrick Lamar",
     source: "Built-in tape",
-    url: "dna_kendrick_lamar.mp3",
+    url: "assets/dna_kendrick_lamar.mp3",
     cover: "",
     licenseUrl: "",
     duration: ""
@@ -34,7 +34,7 @@ const tracks = [
     title: "Slow Down",
     artist: "Bobby V",
     source: "Built-in tape",
-    url: "bobby-v-slow-down-12-version-128-ytshorts.savetube.me.mp3",
+    url: "assets/bobby-v-slow-down-12-version-128-ytshorts.savetube.me.mp3",
     cover: "",
     licenseUrl: "",
     duration: ""
@@ -43,7 +43,7 @@ const tracks = [
     title: "Candy Rain",
     artist: "Soul for Real",
     source: "Built-in tape",
-    url: "Candy Rain - Soul for Real .mp3",
+    url: "assets/Candy Rain - Soul for Real .mp3",
     cover: "",
     licenseUrl: "",
     duration: ""
@@ -52,7 +52,7 @@ const tracks = [
     title: "Freaky in the Club",
     artist: "R. Kelly",
     source: "Built-in tape",
-    url: "r-kelly-freaky-in-the-club-128-ytshorts.savetube.me.mp3",
+    url: "assets/r-kelly-freaky-in-the-club-128-ytshorts.savetube.me.mp3",
     cover: "",
     licenseUrl: "",
     duration: ""
@@ -136,7 +136,8 @@ function updateTrackDetails() {
 
 function setTrackAudioSource(track) {
   audio.removeAttribute("crossorigin");
-  audio.src = track.url;
+  const trackUrl = typeof track.url === "string" ? encodeURI(track.url) : track.url;
+  audio.src = trackUrl;
 }
 
 function loadTrack(index, shouldPlay = false) {
